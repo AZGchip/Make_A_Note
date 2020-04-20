@@ -53,7 +53,8 @@ var renderActiveNote = function() {
 var handleNoteSave = function() {
   var newNote = {
     title: $noteTitle.val(),
-    text: $noteText.val()
+    text: $noteText.val(),
+    id: $noteTitle.val()
   };
 
   saveNote(newNote).then(function(data) {
@@ -84,6 +85,7 @@ var handleNoteDelete = function(event) {
 // Sets the activeNote and displays it
 var handleNoteView = function() {
   activeNote = $(this).data();
+  console.log(activeNote)
   renderActiveNote();
 };
 
@@ -141,4 +143,4 @@ $noteText.on("keyup", handleRenderSaveBtn);
 
 // Gets and renders the initial list of notes
 getAndRenderNotes();
-console.log("this ran")
+
