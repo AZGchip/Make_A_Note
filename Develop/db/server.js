@@ -8,6 +8,7 @@ const PORT = 7500;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+//allows access to static files
 app.use(express.static(path.join(__dirname,"../","public")))
 
 //sends notes.html when /notes is requested
