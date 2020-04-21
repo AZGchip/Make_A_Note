@@ -28,20 +28,43 @@ app.post("/api/notes", function (req, res) {
 
     let newNote = req.body;
     // newNote.routeName = newCharacter.name.replace(/\s+/g, "").toLowerCase();
-fs.readFile("./db.json",function(err, data){
-    let json = JSON.parse(data);
-    json.push(newNote);
-    fs.writeFile("./db.json", JSON.stringify(json),function(err,result){
-        if (err){
-            console.log("err")
-        }
-        res.json(json)
-    });
-    
-})
-    
-    
+    fs.readFile("./db.json", function (err, data) {
+        let json = JSON.parse(data);
+        json.push(newNote);
+        fs.writeFile("./db.json", JSON.stringify(json), function (err, result) {
+            if (err) {
+                console.log(err)
+            }
+            res.json(json)
+        });
+    })
 });
+app.delete("/api/notes/:id", function (req, res) {
+    let deleteId = req.params.id
+    console.log("the id is..." + req.params.id)
+    fs.readFile("./db.json", function (err, data) {
+        if (err) {
+            console.log(err)
+        }
+        let json = JSON.parse(data)
+        console.log(json)
+        json.forEach(x => {
+            let index = json.indexOf(x)
+            if (x.id != undefined && x.id === deleteId) {
+                json.splice(index, 1)
+            }
+        });
+        fs.writeFile("./db.json", JSON.stringify(json), function (err, result) {
+            if (err) {
+                console.log(err)
+            }
+            res.json(json)
+        });
+
+    })
+})
+
+
 
 //port listener
 app.listen(PORT, function () {
