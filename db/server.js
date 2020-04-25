@@ -8,14 +8,15 @@ const PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 //allows access to static files
+
 app.use(express.static(path.join(__dirname, "../", "public")))
 
 //sends notes.html when /notes is requested
 app.get("/notes", function (req, res) {
-    res.sendFile(path.join(__dirname, "../", "public", "notes.html"))
+    res.sendFile(path.join(__dirname, "../", "public", "notes.html"));
 })
 app.get("/api/notes", function (req, res) {
-    res.sendFile(path.join(__dirname, "db.json"))
+    res.sendFile(path.join(__dirname, "db.json"));
 })
 
 //if anything except the app.get above is requested, sends index.html
@@ -24,13 +25,14 @@ app.get("*", function (req, res) {
 
 })
 app.post("/api/notes", function (req, res) {
-
     let newNote = req.body;
-    // newNote.routeName = newCharacter.name.replace(/\s+/g, "").toLowerCase();
-    fs.readFile("./db.json", function (err, data) {
+    fs.readFile(__dirname+"/db.json", function (err, data) {
+        if (err) {
+            console.log("read file error"+err);
+        }
         let json = JSON.parse(data);
         json.push(newNote);
-        fs.writeFile("./db.json", JSON.stringify(json), function (err, result) {
+        fs.writeFile(__dirname+"/db.json", JSON.stringify(json), function (err, result) {
             if (err) {
                 console.log(err)
             }
@@ -40,10 +42,9 @@ app.post("/api/notes", function (req, res) {
 });
 app.delete("/api/notes/:id", function (req, res) {
     let deleteId = req.params.id
-    console.log("the id is..." + req.params.id)
-    fs.readFile("./db.json", function (err, data) {
+    fs.readFile(__dirname+"/db.json", function (err, data) {
         if (err) {
-            console.log(err)
+            console.log("read file error is" + err)
         }
         let json = JSON.parse(data)
         console.log(json)
@@ -53,7 +54,7 @@ app.delete("/api/notes/:id", function (req, res) {
                 json.splice(index, 1)
             }
         });
-        fs.writeFile("./db.json", JSON.stringify(json), function (err, result) {
+        fs.writeFile(__dirname+"/db.json", JSON.stringify(json), function (err, result) {
             if (err) {
                 console.log(err)
             }
