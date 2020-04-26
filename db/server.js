@@ -8,7 +8,6 @@ const PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 //allows access to static files
-
 app.use(express.static(path.join(__dirname, "../", "public")))
 
 //sends notes.html when /notes is requested
@@ -22,8 +21,8 @@ app.get("/api/notes", function (req, res) {
 //if anything except the app.get above is requested, sends index.html
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "../", "public", "index.html"))
-
 })
+//adds notes to json
 app.post("/api/notes", function (req, res) {
     let newNote = req.body;
     fs.readFile(__dirname+"/db.json", function (err, data) {
@@ -40,6 +39,7 @@ app.post("/api/notes", function (req, res) {
         });
     })
 });
+//removes notes from json
 app.delete("/api/notes/:id", function (req, res) {
     let deleteId = req.params.id
     fs.readFile(__dirname+"/db.json", function (err, data) {
@@ -60,12 +60,8 @@ app.delete("/api/notes/:id", function (req, res) {
             }
             res.json(json)
         });
-
     })
 })
-
-
-
 //port listener
 app.listen(PORT, function () {
     console.log("App listening on PORT " + PORT);
